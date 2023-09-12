@@ -4,7 +4,8 @@ use std::collections::HashMap;
 
 use proc_macro::TokenStream;
 use quote::quote;
-use syn::{parse_macro_input, DeriveInput, Type, Ident};
+use syn::{parse_macro_input, DeriveInput};
+use serde::{Serialize, Deserialize};
 
 #[proc_macro_derive(Iter)]
 pub fn iter_macro_derive(input: TokenStream) -> TokenStream {
@@ -23,33 +24,28 @@ fn impl_iter(ast: &syn::DeriveInput) -> TokenStream {
     {
         fields
     } else {
-        panic!("Only support Struct");
+        panic!("Only support Struct")
     };
 
     let mut keys = Vec::new();
+    let mut values = Vec::new();
     let mut types = Vec::new();
-    let mut idents = Vec::new();
 
     for field in fields.named.iter() {
-        let name = field.ident.as_ref().unwrap().to_string();
-        let ty = &field.ty;
-        keys.push(name);
-        types.push(ty);
-        idents.push(&field.ident);
+        let Key = field.ident.as_ref().unwrap().to_string();
+        let Value = &field.ident;
+        let Type = &field.ty;
+        keys.push(Key);
+        values.push(Value);
+        types.push(Type);
     }
 
-    quote! { 
+    quote! {
         impl Iter for #name {
-            fn to_array(&self) {
-                println!("{}:",
-                    stringify!(#name));
+            fn print(&self) {
                 #(
-                    println!(
-                        "key={key}, value={value}, type={type_name}",
-                        key = #keys,
-                        value = self.#idents,
-                        type_name = stringify!(#types)
-                    );
+                    println!("Key: {}; Value: {}; Type: {};",
+                        #keys, self.#values, stringify!(#types));
                 )*
             }
         }

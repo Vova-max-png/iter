@@ -1,5 +1,5 @@
 [package]
-name = "itr_derive"
+name = "iterate_derive"
 version = "0.1.0"
 edition = "2021"
 
@@ -10,4 +10,5 @@ proc-macro = true
 
 [dependencies]
 quote = "1.0.33"
-syn = "2.0.31"
+serde = { version = "1.0.188", features = ["derive"] }
+syn = { version = "2.0.31", features = ["derive"] }

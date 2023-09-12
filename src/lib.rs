@@ -1,3 +1,4 @@
 pub trait Iter {
-    fn to_array(&self);
+    fn print(&self);
+    // fn get(&self)
 }
